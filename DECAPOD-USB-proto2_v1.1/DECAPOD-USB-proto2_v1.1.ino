@@ -23,7 +23,7 @@ char myInput0;
 char myInput1;
 char myInput2;
 
-uint8_t reverse(uint8_t in) {
+inline uint8_t reverse(uint8_t in) {
   uint8_t out;
   out = 0;
   if (in & 0x01) out |= 0x80;
@@ -322,10 +322,10 @@ void loop() {
 
         // Read axis and button inputs (bitwise NOT results in a 1 when button/axis pressed)
         axesDirect[0] = ~(reverse(myInput0 & B00001111));                                                    //~(PINF & B11110000);
-        buttonsDirect[0] = ~((myInput0 & B11110000) >> 4 | (myInput1 & B00001111) << 4 | (B11111111 << 8));  //~((PIND & B00011111) | ((PIND & B10000000) << 4) | ((PINB & B01111110) << 4));
+        buttonsDirect[0] = ~((myInput0 & B11110000) >> 4 | (myInput1 & B00001100) << 2 | (myInput1 & B00000011) << 6 | (B11111111 << 8));
 
         axesDirect[1] = ~((reverse(myInput1 & B11110000)) << 4);  //~(PINF & B11110000);
-        buttonsDirect[1] = ~((myInput2) | (B11110000 << 4));      //~((PIND & B00011111) | ((PIND & B10000000) << 4) | ((PINB & B01111110) << 4));
+        buttonsDirect[1] = ~((myInput2 & B00001111) | (myInput2 & B00110000) << 2 | (myInput2 & B11000000) >> 2 | (B11110000 << 4));
 
         for (byte gp = 0; gp < GAMEPAD_COUNT; gp++) {
           axes[gp] = axesDirect[gp];
@@ -387,7 +387,7 @@ void loop() {
   }
 }
 
-void sendLatch() {
+inline void sendLatch() {
   // Send a latch pulse to the NES controller(s)
   PORTD |= B00100000;  // Set HIGH
   if (SISTEMA == NES) delayMicroseconds(MICROS_LATCH_NES);
@@ -397,7 +397,7 @@ void sendLatch() {
   if (SISTEMA == SNES) DELAY_CYCLES(CYCLES_PAUSE);
 }
 
-void sendClock() {
+inline void sendClock() {
   // Send a clock pulse to the NES controller(s)
   PORTD |= B10010000;  // Set HIGH
   if (SISTEMA == NES) delayMicroseconds(MICROS_CLOCK_NES);

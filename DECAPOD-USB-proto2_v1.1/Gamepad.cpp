@@ -25,8 +25,6 @@
  */
 #include "Gamepad.h"
 
-int SISTEMAgp = NOT_SELECTED;
-
 //GENERIC
 static const uint8_t _hidReportDescriptor[] PROGMEM = {
   0x05, 0x01,  // USAGE_PAGE (Generic Desktop)
@@ -139,16 +137,12 @@ static const uint8_t _hidReportDescriptorNG[] PROGMEM = {
   0xa1, 0x00,  // COLLECTION (Physical)
   0x05, 0x09,  // USAGE_PAGE (Button)
   0x19, 0x01,  // USAGE_MINIMUM (Button 1)
-  0x29, 0x0c,  // USAGE_MAXIMUM (Button 12)
+  0x29, 0x08,  // USAGE_MAXIMUM (Button 8)
   0x15, 0x00,  // LOGICAL_MINIMUM (0)
   0x25, 0x01,  // LOGICAL_MAXIMUM (1)
-  0x95, 0x0c,  // REPORT_COUNT (12)
+  0x95, 0x08,  // REPORT_COUNT (8)
   0x75, 0x01,  // REPORT_SIZE (1)
   0x81, 0x02,  // INPUT (Data,Var,Abs)
-
-  0x95, 0x01,  // REPORT_COUNT (1) ; pad out the bits into a number divisible by 8
-  0x75, 0x04,  // REPORT_SIZE (4)
-  0x81, 0x03,  // INPUT (Const,Var,Abs)
 
   0x05, 0x01,  // USAGE_PAGE (Generic Desktop)
   0x09, 0x01,  // USAGE (pointer)
@@ -327,65 +321,6 @@ bool Gamepad_::setup(USBSetup& setup) {
   }
 
   return false;
-}
-
-void Gamepad_::reset() {
-  switch (SISTEMAgp) {
-    case NES_:
-      _GamepadReport_NES.X = 0;
-      _GamepadReport_NES.Y = 0;
-      _GamepadReport_NES.buttons = 0;
-      break;
-
-    case SNES_:
-      _GamepadReport_SNES.X = 0;
-      _GamepadReport_SNES.Y = 0;
-      _GamepadReport_SNES.buttons = 0;
-      break;
-
-    case NEOGEO_:
-      _GamepadReport_NEOGEO.X = 0;
-      _GamepadReport_NEOGEO.Y = 0;
-      _GamepadReport_NEOGEO.buttons = 0;
-      break;
-
-    case GENESIS_:
-      _GamepadReport_GENESIS.X = 0;
-      _GamepadReport_GENESIS.Y = 0;
-      _GamepadReport_GENESIS.buttons = 0;
-      break;
-
-    default:
-      _GamepadReport.X = 0;
-      _GamepadReport.Y = 0;
-      _GamepadReport.buttons = 0;
-      break;
-  }
-  this->send();
-}
-
-void Gamepad_::send() {
-  switch (SISTEMAgp) {
-    case NES_:
-      USB_Send(pluggedEndpoint | TRANSFER_RELEASE, &_GamepadReport_NES, sizeof(GamepadReport_NES));
-      break;
-
-    case SNES_:
-      USB_Send(pluggedEndpoint | TRANSFER_RELEASE, &_GamepadReport_SNES, sizeof(GamepadReport_SNES));
-      break;
-
-    case NEOGEO_:
-      USB_Send(pluggedEndpoint | TRANSFER_RELEASE, &_GamepadReport_NEOGEO, sizeof(GamepadReport_NEOGEO));
-      break;
-
-    case GENESIS_:
-      USB_Send(pluggedEndpoint | TRANSFER_RELEASE, &_GamepadReport_GENESIS, sizeof(GamepadReport_GENESIS));
-      break;
-
-    default:
-      USB_Send(pluggedEndpoint | TRANSFER_RELEASE, &_GamepadReport, sizeof(GamepadReport));
-      break;
-  }
 }
 
 uint8_t Gamepad_::getShortName(char* name) {
