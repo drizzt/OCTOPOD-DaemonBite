@@ -25,13 +25,6 @@
  */
 #include "Gamepad.h"
 
-#define NOT_SELECTED 0
-#define NES 1
-#define SNES 2
-#define NEOGEO 3
-#define PCE 4
-#define GENESIS 5
-
 int SISTEMAgp = NOT_SELECTED;
 
 //GENERIC
@@ -70,8 +63,41 @@ static const uint8_t _hidReportDescriptor[] PROGMEM = {
   0xc0,                             // END_COLLECTION 
 };
 
+//NES
+static const uint8_t _hidReportDescriptorNES[] PROGMEM = {
+  0x05, 0x01,                       // USAGE_PAGE (Generic Desktop)
+  0x09, 0x04,                       // USAGE (Joystick) (Maybe change to gamepad? I don't think so but...)
+  0xa1, 0x01,                       // COLLECTION (Application)
+    0xa1, 0x00,                       // COLLECTION (Physical)
+    
+      0x05, 0x09,                       // USAGE_PAGE (Button)
+      0x19, 0x01,                       // USAGE_MINIMUM (Button 1)
+      0x29, 0x04,                       // USAGE_MAXIMUM (Button 4)
+      0x15, 0x00,                       // LOGICAL_MINIMUM (0)
+      0x25, 0x01,                       // LOGICAL_MAXIMUM (1)
+      0x95, 0x04,                       // REPORT_COUNT (4)
+      0x75, 0x01,                       // REPORT_SIZE (1)
+      0x81, 0x02,                       // INPUT (Data,Var,Abs)
 
+      0x95, 0x01,                       // REPORT_COUNT (1) ; pad out the bits into a number divisible by 8
+      0x75, 0x04,                       // REPORT_SIZE (4)
+      0x81, 0x03,                       // INPUT (Const,Var,Abs)
 
+      0x05, 0x01,                       // USAGE_PAGE (Generic Desktop)
+      0x09, 0x01,                       // USAGE (pointer)
+      0xa1, 0x00,                       // COLLECTION (Physical) 
+        0x09, 0x30,                       // USAGE (X)
+        0x09, 0x31,                       // USAGE (Y)
+        0x15, 0xff,                       // LOGICAL_MINIMUM (-1)
+        0x25, 0x01,                       // LOGICAL_MAXIMUM (1)
+        0x95, 0x02,                       // REPORT_COUNT (2)
+        0x75, 0x08,                       // REPORT_SIZE (8)
+        0x81, 0x02,                       // INPUT (Data,Var,Abs)
+      0xc0,                             // END_COLLECTION
+
+    0xc0,                             // END_COLLECTION
+  0xc0,                             // END_COLLECTION 
+};
 
 //SNES
 static const uint8_t _hidReportDescriptorSNES[] PROGMEM = {
@@ -88,6 +114,41 @@ static const uint8_t _hidReportDescriptorSNES[] PROGMEM = {
       0x95, 0x18,                       // REPORT_COUNT (24)
       0x75, 0x01,                       // REPORT_SIZE (1)
       0x81, 0x02,                       // INPUT (Data,Var,Abs)
+
+      0x05, 0x01,                       // USAGE_PAGE (Generic Desktop)
+      0x09, 0x01,                       // USAGE (pointer)
+      0xa1, 0x00,                       // COLLECTION (Physical) 
+        0x09, 0x30,                       // USAGE (X)
+        0x09, 0x31,                       // USAGE (Y)
+        0x15, 0xff,                       // LOGICAL_MINIMUM (-1)
+        0x25, 0x01,                       // LOGICAL_MAXIMUM (1)
+        0x95, 0x02,                       // REPORT_COUNT (2)
+        0x75, 0x08,                       // REPORT_SIZE (8)
+        0x81, 0x02,                       // INPUT (Data,Var,Abs)
+      0xc0,                             // END_COLLECTION
+
+    0xc0,                             // END_COLLECTION
+  0xc0,                             // END_COLLECTION 
+};
+
+//NEOGEO
+static const uint8_t _hidReportDescriptorNG[] PROGMEM = {
+  0x05, 0x01,                       // USAGE_PAGE (Generic Desktop)
+  0x09, 0x04,                       // USAGE (Joystick) (Maybe change to gamepad? I don't think so but...)
+  0xa1, 0x01,                       // COLLECTION (Application)
+    0xa1, 0x00,                       // COLLECTION (Physical)
+      0x05, 0x09,                       // USAGE_PAGE (Button)
+      0x19, 0x01,                       // USAGE_MINIMUM (Button 1)
+      0x29, 0x0c,                       // USAGE_MAXIMUM (Button 12)
+      0x15, 0x00,                       // LOGICAL_MINIMUM (0)
+      0x25, 0x01,                       // LOGICAL_MAXIMUM (1)
+      0x95, 0x0c,                       // REPORT_COUNT (12)
+      0x75, 0x01,                       // REPORT_SIZE (1)
+      0x81, 0x02,                       // INPUT (Data,Var,Abs)
+
+      0x95, 0x01,                       // REPORT_COUNT (1) ; pad out the bits into a number divisible by 8
+      0x75, 0x04,                       // REPORT_SIZE (4)
+      0x81, 0x03,                       // INPUT (Const,Var,Abs)
 
       0x05, 0x01,                       // USAGE_PAGE (Generic Desktop)
       0x09, 0x01,                       // USAGE (pointer)
@@ -141,115 +202,6 @@ static const uint8_t _hidReportDescriptorGEN[] PROGMEM = {
   0xc0,                             // END_COLLECTION 
 };
 
-//PCE
-static const uint8_t _hidReportDescriptorPCE[] PROGMEM = {
-  0x05, 0x01,                       // USAGE_PAGE (Generic Desktop)
-  0x09, 0x04,                       // USAGE (Joystick) (Maybe change to gamepad? I don't think so but...)
-  0xa1, 0x01,                       // COLLECTION (Application)
-    0xa1, 0x00,                       // COLLECTION (Physical)
-    
-      0x05, 0x09,                       // USAGE_PAGE (Button)
-      0x19, 0x01,                       // USAGE_MINIMUM (Button 1)
-      0x29, 0x08,                       // USAGE_MAXIMUM (Button 8)
-      0x15, 0x00,                       // LOGICAL_MINIMUM (0)
-      0x25, 0x01,                       // LOGICAL_MAXIMUM (1)
-      0x95, 0x08,                       // REPORT_COUNT (8)
-      0x75, 0x01,                       // REPORT_SIZE (1)
-      0x81, 0x02,                       // INPUT (Data,Var,Abs)
-
-      /*0x95, 0x01,                       // REPORT_COUNT (1) ; pad out the bits into a number divisible by 8
-      0x75, 0x08,                       // REPORT_SIZE (8)
-      0x81, 0x03,                       // INPUT (Const,Var,Abs)
-*/
-      0x05, 0x01,                       // USAGE_PAGE (Generic Desktop)
-      0x09, 0x01,                       // USAGE (pointer)
-      0xa1, 0x00,                       // COLLECTION (Physical) 
-        0x09, 0x30,                       // USAGE (X)
-        0x09, 0x31,                       // USAGE (Y)
-        0x15, 0xff,                       // LOGICAL_MINIMUM (-1)
-        0x25, 0x01,                       // LOGICAL_MAXIMUM (1)
-        0x95, 0x02,                       // REPORT_COUNT (2)
-        0x75, 0x08,                       // REPORT_SIZE (8)
-        0x81, 0x02,                       // INPUT (Data,Var,Abs)
-      0xc0,                             // END_COLLECTION
-
-    0xc0,                             // END_COLLECTION
-  0xc0,                             // END_COLLECTION 
-};
-
-//NES
-static const uint8_t _hidReportDescriptorNES[] PROGMEM = {
-  0x05, 0x01,                       // USAGE_PAGE (Generic Desktop)
-  0x09, 0x04,                       // USAGE (Joystick) (Maybe change to gamepad? I don't think so but...)
-  0xa1, 0x01,                       // COLLECTION (Application)
-    0xa1, 0x00,                       // COLLECTION (Physical)
-    
-      0x05, 0x09,                       // USAGE_PAGE (Button)
-      0x19, 0x01,                       // USAGE_MINIMUM (Button 1)
-      0x29, 0x04,                       // USAGE_MAXIMUM (Button 4)
-      0x15, 0x00,                       // LOGICAL_MINIMUM (0)
-      0x25, 0x01,                       // LOGICAL_MAXIMUM (1)
-      0x95, 0x04,                       // REPORT_COUNT (4)
-      0x75, 0x01,                       // REPORT_SIZE (1)
-      0x81, 0x02,                       // INPUT (Data,Var,Abs)
-
-      0x95, 0x01,                       // REPORT_COUNT (1) ; pad out the bits into a number divisible by 8
-      0x75, 0x04,                       // REPORT_SIZE (4)
-      0x81, 0x03,                       // INPUT (Const,Var,Abs)
-
-      0x05, 0x01,                       // USAGE_PAGE (Generic Desktop)
-      0x09, 0x01,                       // USAGE (pointer)
-      0xa1, 0x00,                       // COLLECTION (Physical) 
-        0x09, 0x30,                       // USAGE (X)
-        0x09, 0x31,                       // USAGE (Y)
-        0x15, 0xff,                       // LOGICAL_MINIMUM (-1)
-        0x25, 0x01,                       // LOGICAL_MAXIMUM (1)
-        0x95, 0x02,                       // REPORT_COUNT (2)
-        0x75, 0x08,                       // REPORT_SIZE (8)
-        0x81, 0x02,                       // INPUT (Data,Var,Abs)
-      0xc0,                             // END_COLLECTION
-
-    0xc0,                             // END_COLLECTION
-  0xc0,                             // END_COLLECTION 
-};
-
-//NEOGEO
-static const uint8_t _hidReportDescriptorNG[] PROGMEM = {
-  0x05, 0x01,                       // USAGE_PAGE (Generic Desktop)
-  0x09, 0x04,                       // USAGE (Joystick) (Maybe change to gamepad? I don't think so but...)
-  0xa1, 0x01,                       // COLLECTION (Application)
-    0xa1, 0x00,                       // COLLECTION (Physical)
-    
-      0x05, 0x09,                       // USAGE_PAGE (Button)
-      0x19, 0x01,                       // USAGE_MINIMUM (Button 1)
-      0x29, 0x0c,                       // USAGE_MAXIMUM (Button 12)
-      0x15, 0x00,                       // LOGICAL_MINIMUM (0)
-      0x25, 0x01,                       // LOGICAL_MAXIMUM (1)
-      0x95, 0x0c,                       // REPORT_COUNT (12)
-      0x75, 0x01,                       // REPORT_SIZE (1)
-      0x81, 0x02,                       // INPUT (Data,Var,Abs)
-
-      0x95, 0x01,                       // REPORT_COUNT (1) ; pad out the bits into a number divisible by 8
-      0x75, 0x04,                       // REPORT_SIZE (4)
-      0x81, 0x03,                       // INPUT (Const,Var,Abs)
-
-      0x05, 0x01,                       // USAGE_PAGE (Generic Desktop)
-      0x09, 0x01,                       // USAGE (pointer)
-      0xa1, 0x00,                       // COLLECTION (Physical) 
-        0x09, 0x30,                       // USAGE (X)
-        0x09, 0x31,                       // USAGE (Y)
-        0x15, 0xff,                       // LOGICAL_MINIMUM (-1)
-        0x25, 0x01,                       // LOGICAL_MAXIMUM (1)
-        0x95, 0x02,                       // REPORT_COUNT (2)
-        0x75, 0x08,                       // REPORT_SIZE (8)
-        0x81, 0x02,                       // INPUT (Data,Var,Abs)
-      0xc0,                             // END_COLLECTION
-
-    0xc0,                             // END_COLLECTION
-  0xc0,                             // END_COLLECTION 
-};
-
-//Gamepad_::Gamepad_(void) : PluggableUSBModule(1, 1, epType), protocol(HID_REPORT_PROTOCOL), idle(1)
 Gamepad_::Gamepad_(int SYSTEM) : PluggableUSBModule(1, 1, epType), protocol(HID_REPORT_PROTOCOL), idle(1)
 {
   SISTEMAgp=SYSTEM;
@@ -260,61 +212,57 @@ Gamepad_::Gamepad_(int SYSTEM) : PluggableUSBModule(1, 1, epType), protocol(HID_
 int Gamepad_::getInterface(uint8_t* interfaceCount)
 {
   *interfaceCount += 1; // uses 1
-  if (SISTEMAgp == GENESIS)
-  {
-    HIDDescriptor hidInterface = {
-      D_INTERFACE(pluggedInterface, 1, USB_DEVICE_CLASS_HUMAN_INTERFACE, HID_SUBCLASS_NONE, HID_PROTOCOL_NONE),
-      D_HIDREPORT(sizeof(_hidReportDescriptorGEN)),
-      D_ENDPOINT(USB_ENDPOINT_IN(pluggedEndpoint), USB_ENDPOINT_TYPE_INTERRUPT, USB_EP_SIZE, 0x01)
-    };
-    return USB_SendControl(0, &hidInterface, sizeof(hidInterface));
+  switch(SISTEMAgp) {
+    case NES_:
+      {
+        HIDDescriptor hidInterface = {
+          D_INTERFACE(pluggedInterface, 1, USB_DEVICE_CLASS_HUMAN_INTERFACE, HID_SUBCLASS_NONE, HID_PROTOCOL_NONE),
+          D_HIDREPORT(sizeof(_hidReportDescriptorNES)),
+          D_ENDPOINT(USB_ENDPOINT_IN(pluggedEndpoint), USB_ENDPOINT_TYPE_INTERRUPT, USB_EP_SIZE, 0x01)
+        };
+        return USB_SendControl(0, &hidInterface, sizeof(hidInterface));
+      }
+
+    case SNES_:
+      {
+        HIDDescriptor hidInterface = {
+          D_INTERFACE(pluggedInterface, 1, USB_DEVICE_CLASS_HUMAN_INTERFACE, HID_SUBCLASS_NONE, HID_PROTOCOL_NONE),
+          D_HIDREPORT(sizeof(_hidReportDescriptorSNES)),
+          D_ENDPOINT(USB_ENDPOINT_IN(pluggedEndpoint), USB_ENDPOINT_TYPE_INTERRUPT, USB_EP_SIZE, 0x01)
+        };
+        return USB_SendControl(0, &hidInterface, sizeof(hidInterface));
+      }
+
+    case NEOGEO_:
+      {
+        HIDDescriptor hidInterface = {
+          D_INTERFACE(pluggedInterface, 1, USB_DEVICE_CLASS_HUMAN_INTERFACE, HID_SUBCLASS_NONE, HID_PROTOCOL_NONE),
+          D_HIDREPORT(sizeof(_hidReportDescriptorNG)),
+          D_ENDPOINT(USB_ENDPOINT_IN(pluggedEndpoint), USB_ENDPOINT_TYPE_INTERRUPT, USB_EP_SIZE, 0x01)
+        };
+        return USB_SendControl(0, &hidInterface, sizeof(hidInterface));
+      }
+
+    case GENESIS_:
+      {
+        HIDDescriptor hidInterface = {
+          D_INTERFACE(pluggedInterface, 1, USB_DEVICE_CLASS_HUMAN_INTERFACE, HID_SUBCLASS_NONE, HID_PROTOCOL_NONE),
+          D_HIDREPORT(sizeof(_hidReportDescriptorGEN)),
+          D_ENDPOINT(USB_ENDPOINT_IN(pluggedEndpoint), USB_ENDPOINT_TYPE_INTERRUPT, USB_EP_SIZE, 0x01)
+        };
+        return USB_SendControl(0, &hidInterface, sizeof(hidInterface));
+      }
+
+    default:
+      {
+        HIDDescriptor hidInterface = {
+          D_INTERFACE(pluggedInterface, 1, USB_DEVICE_CLASS_HUMAN_INTERFACE, HID_SUBCLASS_NONE, HID_PROTOCOL_NONE),
+          D_HIDREPORT(sizeof(_hidReportDescriptor)),
+          D_ENDPOINT(USB_ENDPOINT_IN(pluggedEndpoint), USB_ENDPOINT_TYPE_INTERRUPT, USB_EP_SIZE, 0x01)
+        };
+        return USB_SendControl(0, &hidInterface, sizeof(hidInterface));
+      }
   }
-  else if (SISTEMAgp == NES)
-  {
-    HIDDescriptor hidInterface = {
-      D_INTERFACE(pluggedInterface, 1, USB_DEVICE_CLASS_HUMAN_INTERFACE, HID_SUBCLASS_NONE, HID_PROTOCOL_NONE),
-      D_HIDREPORT(sizeof(_hidReportDescriptorNES)),
-      D_ENDPOINT(USB_ENDPOINT_IN(pluggedEndpoint), USB_ENDPOINT_TYPE_INTERRUPT, USB_EP_SIZE, 0x01)
-    };
-    return USB_SendControl(0, &hidInterface, sizeof(hidInterface));
-  }
-  else if (SISTEMAgp == SNES)
-  {
-    HIDDescriptor hidInterface = {
-      D_INTERFACE(pluggedInterface, 1, USB_DEVICE_CLASS_HUMAN_INTERFACE, HID_SUBCLASS_NONE, HID_PROTOCOL_NONE),
-      D_HIDREPORT(sizeof(_hidReportDescriptorSNES)),
-      D_ENDPOINT(USB_ENDPOINT_IN(pluggedEndpoint), USB_ENDPOINT_TYPE_INTERRUPT, USB_EP_SIZE, 0x01)
-    };
-    return USB_SendControl(0, &hidInterface, sizeof(hidInterface));
-  }
-  else if (SISTEMAgp == PCE)
-  {
-    HIDDescriptor hidInterface = {
-      D_INTERFACE(pluggedInterface, 1, USB_DEVICE_CLASS_HUMAN_INTERFACE, HID_SUBCLASS_NONE, HID_PROTOCOL_NONE),
-      D_HIDREPORT(sizeof(_hidReportDescriptorPCE)),
-      D_ENDPOINT(USB_ENDPOINT_IN(pluggedEndpoint), USB_ENDPOINT_TYPE_INTERRUPT, USB_EP_SIZE, 0x01)
-    };
-    return USB_SendControl(0, &hidInterface, sizeof(hidInterface));
-  }
-  else if (SISTEMAgp == NEOGEO)
-  {
-    HIDDescriptor hidInterface = {
-      D_INTERFACE(pluggedInterface, 1, USB_DEVICE_CLASS_HUMAN_INTERFACE, HID_SUBCLASS_NONE, HID_PROTOCOL_NONE),
-      D_HIDREPORT(sizeof(_hidReportDescriptorNG)),
-      D_ENDPOINT(USB_ENDPOINT_IN(pluggedEndpoint), USB_ENDPOINT_TYPE_INTERRUPT, USB_EP_SIZE, 0x01)
-    };
-    return USB_SendControl(0, &hidInterface, sizeof(hidInterface));
-  }
-  else
-  {
-      HIDDescriptor hidInterface = {
-      D_INTERFACE(pluggedInterface, 1, USB_DEVICE_CLASS_HUMAN_INTERFACE, HID_SUBCLASS_NONE, HID_PROTOCOL_NONE),
-      D_HIDREPORT(sizeof(_hidReportDescriptor)),
-      D_ENDPOINT(USB_ENDPOINT_IN(pluggedEndpoint), USB_ENDPOINT_TYPE_INTERRUPT, USB_EP_SIZE, 0x01)
-    };
-    return USB_SendControl(0, &hidInterface, sizeof(hidInterface));
-  }
-  
 }
 
 int Gamepad_::getDescriptor(USBSetup& setup)
@@ -330,18 +278,22 @@ int Gamepad_::getDescriptor(USBSetup& setup)
   // due to the USB specs, but Windows and Linux just assumes its in report mode.
   protocol = HID_REPORT_PROTOCOL;
 
-  if (SISTEMAgp == GENESIS)
-    return USB_SendControl(TRANSFER_PGM, _hidReportDescriptorGEN, sizeof(_hidReportDescriptorGEN));
-  else if (SISTEMAgp == NES)
-    return USB_SendControl(TRANSFER_PGM, _hidReportDescriptorNES, sizeof(_hidReportDescriptorNES));
-  else if (SISTEMAgp == SNES)
-    return USB_SendControl(TRANSFER_PGM, _hidReportDescriptorSNES, sizeof(_hidReportDescriptorSNES));
-  else if (SISTEMAgp == NEOGEO)
-    return USB_SendControl(TRANSFER_PGM, _hidReportDescriptorNG, sizeof(_hidReportDescriptorNG));
-  else if (SISTEMAgp == PCE)
-    return USB_SendControl(TRANSFER_PGM, _hidReportDescriptorPCE, sizeof(_hidReportDescriptorPCE));
-  else
-    return USB_SendControl(TRANSFER_PGM, _hidReportDescriptor, sizeof(_hidReportDescriptor));
+  switch(SISTEMAgp) {
+    case NES_:
+      return USB_SendControl(TRANSFER_PGM, _hidReportDescriptorNES, sizeof(_hidReportDescriptorNES));
+
+    case SNES_:
+      return USB_SendControl(TRANSFER_PGM, _hidReportDescriptorSNES, sizeof(_hidReportDescriptorSNES));
+
+    case NEOGEO_:
+      return USB_SendControl(TRANSFER_PGM, _hidReportDescriptorNG, sizeof(_hidReportDescriptorNG));
+
+    case GENESIS_:
+      return USB_SendControl(TRANSFER_PGM, _hidReportDescriptorGEN, sizeof(_hidReportDescriptorGEN));
+
+    default:
+      return USB_SendControl(TRANSFER_PGM, _hidReportDescriptor, sizeof(_hidReportDescriptor));
+  }
 }
 
 bool Gamepad_::setup(USBSetup& setup)
@@ -385,70 +337,62 @@ bool Gamepad_::setup(USBSetup& setup)
 
 void Gamepad_::reset()
 {
-  if (SISTEMAgp == SNES)
-  {
-    _GamepadReport_SNES.X = 0;
-    _GamepadReport_SNES.Y = 0;
-    _GamepadReport_SNES.buttons = 0;
-  }
-  if (SISTEMAgp == NES)
-  {
-    _GamepadReport_NES.X = 0;
-    _GamepadReport_NES.Y = 0;
-    _GamepadReport_NES.buttons = 0;
-  }
-  if (SISTEMAgp == GENESIS)
-  {
-    _GamepadReport_GENESIS.X = 0;
-    _GamepadReport_GENESIS.Y = 0;
-    _GamepadReport_GENESIS.buttons = 0;
-  }
-  if (SISTEMAgp == PCE)
-  {
-    _GamepadReport_PCE.X = 0;
-    _GamepadReport_PCE.Y = 0;
-    _GamepadReport_PCE.buttons = 0;
-  }
-  if (SISTEMAgp == NEOGEO)
-  {
-    _GamepadReport_NEOGEO.X = 0;
-    _GamepadReport_NEOGEO.Y = 0;
-    _GamepadReport_NEOGEO.buttons = 0;
-  }
-  if (SISTEMAgp == NOT_SELECTED)
-  {
-    _GamepadReport.X = 0;
-    _GamepadReport.Y = 0;
-    _GamepadReport.buttons = 0;
+  switch (SISTEMAgp) {
+    case NES_:
+      _GamepadReport_NES.X = 0;
+      _GamepadReport_NES.Y = 0;
+      _GamepadReport_NES.buttons = 0;
+      break;
+
+    case SNES_:
+      _GamepadReport_SNES.X = 0;
+      _GamepadReport_SNES.Y = 0;
+      _GamepadReport_SNES.buttons = 0;
+      break;
+
+    case NEOGEO_:
+      _GamepadReport_NEOGEO.X = 0;
+      _GamepadReport_NEOGEO.Y = 0;
+      _GamepadReport_NEOGEO.buttons = 0;
+      break;
+
+    case GENESIS_:
+      _GamepadReport_GENESIS.X = 0;
+      _GamepadReport_GENESIS.Y = 0;
+      _GamepadReport_GENESIS.buttons = 0;
+      break;
+
+    default:
+      _GamepadReport.X = 0;
+      _GamepadReport.Y = 0;
+      _GamepadReport.buttons = 0;
+      break;
   }
   this->send();
 }
 
 void Gamepad_::send() 
 {
-  if (SISTEMAgp == SNES)
-  {
-    USB_Send(pluggedEndpoint | TRANSFER_RELEASE, &_GamepadReport_SNES, sizeof(GamepadReport_SNES));
-  }
-  if (SISTEMAgp == NES)
-  {
-    USB_Send(pluggedEndpoint | TRANSFER_RELEASE, &_GamepadReport_NES, sizeof(GamepadReport_NES));
-  }
-  if (SISTEMAgp == GENESIS)
-  {
-    USB_Send(pluggedEndpoint | TRANSFER_RELEASE, &_GamepadReport_GENESIS, sizeof(GamepadReport_GENESIS));
-  }
-  if (SISTEMAgp == PCE)
-  {
-    USB_Send(pluggedEndpoint | TRANSFER_RELEASE, &_GamepadReport_PCE, sizeof(GamepadReport_PCE));
-  }
-  if (SISTEMAgp == NEOGEO)
-  {
-    USB_Send(pluggedEndpoint | TRANSFER_RELEASE, &_GamepadReport_NEOGEO, sizeof(GamepadReport_NEOGEO));
-  }
-  if (SISTEMAgp == NOT_SELECTED)
-  {
-    USB_Send(pluggedEndpoint | TRANSFER_RELEASE, &_GamepadReport, sizeof(GamepadReport));
+  switch (SISTEMAgp) {
+    case NES_:
+      USB_Send(pluggedEndpoint | TRANSFER_RELEASE, &_GamepadReport_NES, sizeof(GamepadReport_NES));
+      break;
+
+    case SNES_:
+      USB_Send(pluggedEndpoint | TRANSFER_RELEASE, &_GamepadReport_SNES, sizeof(GamepadReport_SNES));
+      break;
+
+    case NEOGEO_:
+      USB_Send(pluggedEndpoint | TRANSFER_RELEASE, &_GamepadReport_NEOGEO, sizeof(GamepadReport_NEOGEO));
+      break;
+
+    case GENESIS_:
+      USB_Send(pluggedEndpoint | TRANSFER_RELEASE, &_GamepadReport_GENESIS, sizeof(GamepadReport_GENESIS));
+      break;
+
+    default:
+      USB_Send(pluggedEndpoint | TRANSFER_RELEASE, &_GamepadReport, sizeof(GamepadReport));
+      break;
   }
 }
 

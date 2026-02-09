@@ -27,43 +27,15 @@
 #pragma once
 
 #include <Arduino.h>
-#include "HID.h"
+#include <HID.h>
 
-extern const char* gp_serial;
+#define NOT_SELECTED 0
+#define NES_ 1
+#define SNES_ 2
+#define NEOGEO_ 3
+#define GENESIS_ 4
 
-typedef struct {
-  //SNES
-  uint32_t buttons : 24;
-  
-  //PCE
-  //uint8_t buttons : 4;
-
-  //NG
-  //uint16_t buttons : 12;
-
-  //NES
-  //uint8_t buttons;
-
-  //GEN
-  //uint16_t buttons;
-
-  int8_t X;
-  int8_t Y;  
-} GamepadReport_SNES;
-
-typedef struct {
-  uint8_t buttons : 8;
-
-  int8_t X;
-  int8_t Y;  
-} GamepadReport_PCE;
-
-typedef struct {
-  uint16_t buttons : 12;
-  
-  int8_t X;
-  int8_t Y;  
-} GamepadReport_NEOGEO;
+extern char gp_serial[16];
 
 typedef struct {
   uint8_t buttons;
@@ -71,6 +43,20 @@ typedef struct {
   int8_t X;
   int8_t Y;  
 } GamepadReport_NES;
+
+typedef struct {
+  uint32_t buttons : 24;
+
+  int8_t X;
+  int8_t Y;  
+} GamepadReport_SNES;
+
+typedef struct {
+  uint16_t buttons : 12;
+  
+  int8_t X;
+  int8_t Y;  
+} GamepadReport_NEOGEO;
 
 typedef struct {
   uint16_t buttons;
@@ -88,9 +74,6 @@ typedef struct {
 
 class Gamepad_ : public PluggableUSBModule
 {  
-  private:
-    uint8_t reportId;
-
   protected:
     int getInterface(uint8_t* interfaceCount);
     int getDescriptor(USBSetup& setup);
@@ -106,10 +89,8 @@ class Gamepad_ : public PluggableUSBModule
     GamepadReport_SNES _GamepadReport_SNES;
     GamepadReport_NEOGEO _GamepadReport_NEOGEO;
     GamepadReport_GENESIS _GamepadReport_GENESIS;
-    GamepadReport_PCE _GamepadReport_PCE;
     GamepadReport _GamepadReport;
-    //Gamepad_(void);
     Gamepad_(int SYSTEM);
     void reset(void);
-    void send();
+    void send(void);
 };
