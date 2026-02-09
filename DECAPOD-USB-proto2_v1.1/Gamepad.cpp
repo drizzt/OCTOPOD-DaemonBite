@@ -29,190 +29,189 @@ int SISTEMAgp = NOT_SELECTED;
 
 //GENERIC
 static const uint8_t _hidReportDescriptor[] PROGMEM = {
-  0x05, 0x01,                       // USAGE_PAGE (Generic Desktop)
-  0x09, 0x04,                       // USAGE (Joystick) (Maybe change to gamepad? I don't think so but...)
-  0xa1, 0x01,                       // COLLECTION (Application)
-    0xa1, 0x00,                       // COLLECTION (Physical)
-    
-      0x05, 0x09,                       // USAGE_PAGE (Button)
-      0x19, 0x01,                       // USAGE_MINIMUM (Button 1)
-      0x29, 0x09,                       // USAGE_MAXIMUM (Button 9)
-      0x15, 0x00,                       // LOGICAL_MINIMUM (0)
-      0x25, 0x01,                       // LOGICAL_MAXIMUM (1)
-      0x95, 0x09,                       // REPORT_COUNT (9)
-      0x75, 0x01,                       // REPORT_SIZE (1)
-      0x81, 0x02,                       // INPUT (Data,Var,Abs)
+  0x05, 0x01,  // USAGE_PAGE (Generic Desktop)
+  0x09, 0x04,  // USAGE (Joystick) (Maybe change to gamepad? I don't think so but...)
+  0xa1, 0x01,  // COLLECTION (Application)
+  0xa1, 0x00,  // COLLECTION (Physical)
 
-      0x95, 0x01,                       // REPORT_COUNT (1) ; pad out the bits into a number divisible by 8
-      0x75, 0x07,                       // REPORT_SIZE (7)
-      0x81, 0x03,                       // INPUT (Const,Var,Abs)
-      
-      0x05, 0x01,                       // USAGE_PAGE (Generic Desktop)
-      0x09, 0x01,                       // USAGE (pointer)
-      0xa1, 0x00,                       // COLLECTION (Physical) 
-        0x09, 0x30,                       // USAGE (X)
-        0x09, 0x31,                       // USAGE (Y)
-        0x15, 0xff,                       // LOGICAL_MINIMUM (-1)
-        0x25, 0x01,                       // LOGICAL_MAXIMUM (1)
-        0x95, 0x02,                       // REPORT_COUNT (2)
-        0x75, 0x08,                       // REPORT_SIZE (8)
-        0x81, 0x02,                       // INPUT (Data,Var,Abs)
-      0xc0,                             // END_COLLECTION
+  0x05, 0x09,  // USAGE_PAGE (Button)
+  0x19, 0x01,  // USAGE_MINIMUM (Button 1)
+  0x29, 0x09,  // USAGE_MAXIMUM (Button 9)
+  0x15, 0x00,  // LOGICAL_MINIMUM (0)
+  0x25, 0x01,  // LOGICAL_MAXIMUM (1)
+  0x95, 0x09,  // REPORT_COUNT (9)
+  0x75, 0x01,  // REPORT_SIZE (1)
+  0x81, 0x02,  // INPUT (Data,Var,Abs)
 
-    0xc0,                             // END_COLLECTION
-  0xc0,                             // END_COLLECTION 
+  0x95, 0x01,  // REPORT_COUNT (1) ; pad out the bits into a number divisible by 8
+  0x75, 0x07,  // REPORT_SIZE (7)
+  0x81, 0x03,  // INPUT (Const,Var,Abs)
+
+  0x05, 0x01,  // USAGE_PAGE (Generic Desktop)
+  0x09, 0x01,  // USAGE (pointer)
+  0xa1, 0x00,  // COLLECTION (Physical)
+  0x09, 0x30,  // USAGE (X)
+  0x09, 0x31,  // USAGE (Y)
+  0x15, 0xff,  // LOGICAL_MINIMUM (-1)
+  0x25, 0x01,  // LOGICAL_MAXIMUM (1)
+  0x95, 0x02,  // REPORT_COUNT (2)
+  0x75, 0x08,  // REPORT_SIZE (8)
+  0x81, 0x02,  // INPUT (Data,Var,Abs)
+  0xc0,        // END_COLLECTION
+
+  0xc0,  // END_COLLECTION
+  0xc0,  // END_COLLECTION
 };
 
 //NES
 static const uint8_t _hidReportDescriptorNES[] PROGMEM = {
-  0x05, 0x01,                       // USAGE_PAGE (Generic Desktop)
-  0x09, 0x04,                       // USAGE (Joystick) (Maybe change to gamepad? I don't think so but...)
-  0xa1, 0x01,                       // COLLECTION (Application)
-    0xa1, 0x00,                       // COLLECTION (Physical)
-    
-      0x05, 0x09,                       // USAGE_PAGE (Button)
-      0x19, 0x01,                       // USAGE_MINIMUM (Button 1)
-      0x29, 0x04,                       // USAGE_MAXIMUM (Button 4)
-      0x15, 0x00,                       // LOGICAL_MINIMUM (0)
-      0x25, 0x01,                       // LOGICAL_MAXIMUM (1)
-      0x95, 0x04,                       // REPORT_COUNT (4)
-      0x75, 0x01,                       // REPORT_SIZE (1)
-      0x81, 0x02,                       // INPUT (Data,Var,Abs)
+  0x05, 0x01,  // USAGE_PAGE (Generic Desktop)
+  0x09, 0x04,  // USAGE (Joystick) (Maybe change to gamepad? I don't think so but...)
+  0xa1, 0x01,  // COLLECTION (Application)
+  0xa1, 0x00,  // COLLECTION (Physical)
 
-      0x95, 0x01,                       // REPORT_COUNT (1) ; pad out the bits into a number divisible by 8
-      0x75, 0x04,                       // REPORT_SIZE (4)
-      0x81, 0x03,                       // INPUT (Const,Var,Abs)
+  0x05, 0x09,  // USAGE_PAGE (Button)
+  0x19, 0x01,  // USAGE_MINIMUM (Button 1)
+  0x29, 0x04,  // USAGE_MAXIMUM (Button 4)
+  0x15, 0x00,  // LOGICAL_MINIMUM (0)
+  0x25, 0x01,  // LOGICAL_MAXIMUM (1)
+  0x95, 0x04,  // REPORT_COUNT (4)
+  0x75, 0x01,  // REPORT_SIZE (1)
+  0x81, 0x02,  // INPUT (Data,Var,Abs)
 
-      0x05, 0x01,                       // USAGE_PAGE (Generic Desktop)
-      0x09, 0x01,                       // USAGE (pointer)
-      0xa1, 0x00,                       // COLLECTION (Physical) 
-        0x09, 0x30,                       // USAGE (X)
-        0x09, 0x31,                       // USAGE (Y)
-        0x15, 0xff,                       // LOGICAL_MINIMUM (-1)
-        0x25, 0x01,                       // LOGICAL_MAXIMUM (1)
-        0x95, 0x02,                       // REPORT_COUNT (2)
-        0x75, 0x08,                       // REPORT_SIZE (8)
-        0x81, 0x02,                       // INPUT (Data,Var,Abs)
-      0xc0,                             // END_COLLECTION
+  0x95, 0x01,  // REPORT_COUNT (1) ; pad out the bits into a number divisible by 8
+  0x75, 0x04,  // REPORT_SIZE (4)
+  0x81, 0x03,  // INPUT (Const,Var,Abs)
 
-    0xc0,                             // END_COLLECTION
-  0xc0,                             // END_COLLECTION 
+  0x05, 0x01,  // USAGE_PAGE (Generic Desktop)
+  0x09, 0x01,  // USAGE (pointer)
+  0xa1, 0x00,  // COLLECTION (Physical)
+  0x09, 0x30,  // USAGE (X)
+  0x09, 0x31,  // USAGE (Y)
+  0x15, 0xff,  // LOGICAL_MINIMUM (-1)
+  0x25, 0x01,  // LOGICAL_MAXIMUM (1)
+  0x95, 0x02,  // REPORT_COUNT (2)
+  0x75, 0x08,  // REPORT_SIZE (8)
+  0x81, 0x02,  // INPUT (Data,Var,Abs)
+  0xc0,        // END_COLLECTION
+
+  0xc0,  // END_COLLECTION
+  0xc0,  // END_COLLECTION
 };
 
 //SNES
 static const uint8_t _hidReportDescriptorSNES[] PROGMEM = {
-  0x05, 0x01,                       // USAGE_PAGE (Generic Desktop)
-  0x09, 0x04,                       // USAGE (Joystick) (Maybe change to gamepad? I don't think so but...)
-  0xa1, 0x01,                       // COLLECTION (Application)
-    0xa1, 0x00,                       // COLLECTION (Physical)
-    
-      0x05, 0x09,                       // USAGE_PAGE (Button)
-      0x19, 0x01,                       // USAGE_MINIMUM (Button 1)
-      0x29, 0x18,                       // USAGE_MAXIMUM (Button 24)
-      0x15, 0x00,                       // LOGICAL_MINIMUM (0)
-      0x25, 0x01,                       // LOGICAL_MAXIMUM (1)
-      0x95, 0x18,                       // REPORT_COUNT (24)
-      0x75, 0x01,                       // REPORT_SIZE (1)
-      0x81, 0x02,                       // INPUT (Data,Var,Abs)
+  0x05, 0x01,  // USAGE_PAGE (Generic Desktop)
+  0x09, 0x04,  // USAGE (Joystick) (Maybe change to gamepad? I don't think so but...)
+  0xa1, 0x01,  // COLLECTION (Application)
+  0xa1, 0x00,  // COLLECTION (Physical)
 
-      0x05, 0x01,                       // USAGE_PAGE (Generic Desktop)
-      0x09, 0x01,                       // USAGE (pointer)
-      0xa1, 0x00,                       // COLLECTION (Physical) 
-        0x09, 0x30,                       // USAGE (X)
-        0x09, 0x31,                       // USAGE (Y)
-        0x15, 0xff,                       // LOGICAL_MINIMUM (-1)
-        0x25, 0x01,                       // LOGICAL_MAXIMUM (1)
-        0x95, 0x02,                       // REPORT_COUNT (2)
-        0x75, 0x08,                       // REPORT_SIZE (8)
-        0x81, 0x02,                       // INPUT (Data,Var,Abs)
-      0xc0,                             // END_COLLECTION
+  0x05, 0x09,  // USAGE_PAGE (Button)
+  0x19, 0x01,  // USAGE_MINIMUM (Button 1)
+  0x29, 0x18,  // USAGE_MAXIMUM (Button 24)
+  0x15, 0x00,  // LOGICAL_MINIMUM (0)
+  0x25, 0x01,  // LOGICAL_MAXIMUM (1)
+  0x95, 0x18,  // REPORT_COUNT (24)
+  0x75, 0x01,  // REPORT_SIZE (1)
+  0x81, 0x02,  // INPUT (Data,Var,Abs)
 
-    0xc0,                             // END_COLLECTION
-  0xc0,                             // END_COLLECTION 
+  0x05, 0x01,  // USAGE_PAGE (Generic Desktop)
+  0x09, 0x01,  // USAGE (pointer)
+  0xa1, 0x00,  // COLLECTION (Physical)
+  0x09, 0x30,  // USAGE (X)
+  0x09, 0x31,  // USAGE (Y)
+  0x15, 0xff,  // LOGICAL_MINIMUM (-1)
+  0x25, 0x01,  // LOGICAL_MAXIMUM (1)
+  0x95, 0x02,  // REPORT_COUNT (2)
+  0x75, 0x08,  // REPORT_SIZE (8)
+  0x81, 0x02,  // INPUT (Data,Var,Abs)
+  0xc0,        // END_COLLECTION
+
+  0xc0,  // END_COLLECTION
+  0xc0,  // END_COLLECTION
 };
 
 //NEOGEO
 static const uint8_t _hidReportDescriptorNG[] PROGMEM = {
-  0x05, 0x01,                       // USAGE_PAGE (Generic Desktop)
-  0x09, 0x04,                       // USAGE (Joystick) (Maybe change to gamepad? I don't think so but...)
-  0xa1, 0x01,                       // COLLECTION (Application)
-    0xa1, 0x00,                       // COLLECTION (Physical)
-      0x05, 0x09,                       // USAGE_PAGE (Button)
-      0x19, 0x01,                       // USAGE_MINIMUM (Button 1)
-      0x29, 0x0c,                       // USAGE_MAXIMUM (Button 12)
-      0x15, 0x00,                       // LOGICAL_MINIMUM (0)
-      0x25, 0x01,                       // LOGICAL_MAXIMUM (1)
-      0x95, 0x0c,                       // REPORT_COUNT (12)
-      0x75, 0x01,                       // REPORT_SIZE (1)
-      0x81, 0x02,                       // INPUT (Data,Var,Abs)
+  0x05, 0x01,  // USAGE_PAGE (Generic Desktop)
+  0x09, 0x04,  // USAGE (Joystick) (Maybe change to gamepad? I don't think so but...)
+  0xa1, 0x01,  // COLLECTION (Application)
+  0xa1, 0x00,  // COLLECTION (Physical)
+  0x05, 0x09,  // USAGE_PAGE (Button)
+  0x19, 0x01,  // USAGE_MINIMUM (Button 1)
+  0x29, 0x0c,  // USAGE_MAXIMUM (Button 12)
+  0x15, 0x00,  // LOGICAL_MINIMUM (0)
+  0x25, 0x01,  // LOGICAL_MAXIMUM (1)
+  0x95, 0x0c,  // REPORT_COUNT (12)
+  0x75, 0x01,  // REPORT_SIZE (1)
+  0x81, 0x02,  // INPUT (Data,Var,Abs)
 
-      0x95, 0x01,                       // REPORT_COUNT (1) ; pad out the bits into a number divisible by 8
-      0x75, 0x04,                       // REPORT_SIZE (4)
-      0x81, 0x03,                       // INPUT (Const,Var,Abs)
+  0x95, 0x01,  // REPORT_COUNT (1) ; pad out the bits into a number divisible by 8
+  0x75, 0x04,  // REPORT_SIZE (4)
+  0x81, 0x03,  // INPUT (Const,Var,Abs)
 
-      0x05, 0x01,                       // USAGE_PAGE (Generic Desktop)
-      0x09, 0x01,                       // USAGE (pointer)
-      0xa1, 0x00,                       // COLLECTION (Physical) 
-        0x09, 0x30,                       // USAGE (X)
-        0x09, 0x31,                       // USAGE (Y)
-        0x15, 0xff,                       // LOGICAL_MINIMUM (-1)
-        0x25, 0x01,                       // LOGICAL_MAXIMUM (1)
-        0x95, 0x02,                       // REPORT_COUNT (2)
-        0x75, 0x08,                       // REPORT_SIZE (8)
-        0x81, 0x02,                       // INPUT (Data,Var,Abs)
-      0xc0,                             // END_COLLECTION
+  0x05, 0x01,  // USAGE_PAGE (Generic Desktop)
+  0x09, 0x01,  // USAGE (pointer)
+  0xa1, 0x00,  // COLLECTION (Physical)
+  0x09, 0x30,  // USAGE (X)
+  0x09, 0x31,  // USAGE (Y)
+  0x15, 0xff,  // LOGICAL_MINIMUM (-1)
+  0x25, 0x01,  // LOGICAL_MAXIMUM (1)
+  0x95, 0x02,  // REPORT_COUNT (2)
+  0x75, 0x08,  // REPORT_SIZE (8)
+  0x81, 0x02,  // INPUT (Data,Var,Abs)
+  0xc0,        // END_COLLECTION
 
-    0xc0,                             // END_COLLECTION
-  0xc0,                             // END_COLLECTION 
+  0xc0,  // END_COLLECTION
+  0xc0,  // END_COLLECTION
 };
 
 //GENESIS
 static const uint8_t _hidReportDescriptorGEN[] PROGMEM = {
-  0x05, 0x01,                       // USAGE_PAGE (Generic Desktop)
-  0x09, 0x04,                       // USAGE (Joystick) (Maybe change to gamepad? I don't think so but...)
-  0xa1, 0x01,                       // COLLECTION (Application)
-    0xa1, 0x00,                       // COLLECTION (Physical)
-    
-      0x05, 0x09,                       // USAGE_PAGE (Button)
-      0x19, 0x01,                       // USAGE_MINIMUM (Button 1)
-      0x29, 0x09,                       // USAGE_MAXIMUM (Button 9)
-      0x15, 0x00,                       // LOGICAL_MINIMUM (0)
-      0x25, 0x01,                       // LOGICAL_MAXIMUM (1)
-      0x95, 0x09,                       // REPORT_COUNT (9)
-      0x75, 0x01,                       // REPORT_SIZE (1)
-      0x81, 0x02,                       // INPUT (Data,Var,Abs)
+  0x05, 0x01,  // USAGE_PAGE (Generic Desktop)
+  0x09, 0x04,  // USAGE (Joystick) (Maybe change to gamepad? I don't think so but...)
+  0xa1, 0x01,  // COLLECTION (Application)
+  0xa1, 0x00,  // COLLECTION (Physical)
 
-      0x95, 0x01,                       // REPORT_COUNT (1) ; pad out the bits into a number divisible by 8
-      0x75, 0x07,                       // REPORT_SIZE (7)
-      0x81, 0x03,                       // INPUT (Const,Var,Abs)
-      
-      0x05, 0x01,                       // USAGE_PAGE (Generic Desktop)
-      0x09, 0x01,                       // USAGE (pointer)
-      0xa1, 0x00,                       // COLLECTION (Physical) 
-        0x09, 0x30,                       // USAGE (X)
-        0x09, 0x31,                       // USAGE (Y)
-        0x15, 0xff,                       // LOGICAL_MINIMUM (-1)
-        0x25, 0x01,                       // LOGICAL_MAXIMUM (1)
-        0x95, 0x02,                       // REPORT_COUNT (2)
-        0x75, 0x08,                       // REPORT_SIZE (8)
-        0x81, 0x02,                       // INPUT (Data,Var,Abs)
-      0xc0,                             // END_COLLECTION
+  0x05, 0x09,  // USAGE_PAGE (Button)
+  0x19, 0x01,  // USAGE_MINIMUM (Button 1)
+  0x29, 0x09,  // USAGE_MAXIMUM (Button 9)
+  0x15, 0x00,  // LOGICAL_MINIMUM (0)
+  0x25, 0x01,  // LOGICAL_MAXIMUM (1)
+  0x95, 0x09,  // REPORT_COUNT (9)
+  0x75, 0x01,  // REPORT_SIZE (1)
+  0x81, 0x02,  // INPUT (Data,Var,Abs)
 
-    0xc0,                             // END_COLLECTION
-  0xc0,                             // END_COLLECTION 
+  0x95, 0x01,  // REPORT_COUNT (1) ; pad out the bits into a number divisible by 8
+  0x75, 0x07,  // REPORT_SIZE (7)
+  0x81, 0x03,  // INPUT (Const,Var,Abs)
+
+  0x05, 0x01,  // USAGE_PAGE (Generic Desktop)
+  0x09, 0x01,  // USAGE (pointer)
+  0xa1, 0x00,  // COLLECTION (Physical)
+  0x09, 0x30,  // USAGE (X)
+  0x09, 0x31,  // USAGE (Y)
+  0x15, 0xff,  // LOGICAL_MINIMUM (-1)
+  0x25, 0x01,  // LOGICAL_MAXIMUM (1)
+  0x95, 0x02,  // REPORT_COUNT (2)
+  0x75, 0x08,  // REPORT_SIZE (8)
+  0x81, 0x02,  // INPUT (Data,Var,Abs)
+  0xc0,        // END_COLLECTION
+
+  0xc0,  // END_COLLECTION
+  0xc0,  // END_COLLECTION
 };
 
-Gamepad_::Gamepad_(int SYSTEM) : PluggableUSBModule(1, 1, epType), protocol(HID_REPORT_PROTOCOL), idle(1)
-{
-  SISTEMAgp=SYSTEM;
+Gamepad_::Gamepad_(int SYSTEM)
+  : PluggableUSBModule(1, 1, epType), protocol(HID_REPORT_PROTOCOL), idle(1) {
+  SISTEMAgp = SYSTEM;
   epType[0] = EP_TYPE_INTERRUPT_IN;
   PluggableUSB().plug(this);
 }
 
-int Gamepad_::getInterface(uint8_t* interfaceCount)
-{
-  *interfaceCount += 1; // uses 1
-  switch(SISTEMAgp) {
+int Gamepad_::getInterface(uint8_t* interfaceCount) {
+  *interfaceCount += 1;  // uses 1
+  switch (SISTEMAgp) {
     case NES_:
       {
         HIDDescriptor hidInterface = {
@@ -265,8 +264,7 @@ int Gamepad_::getInterface(uint8_t* interfaceCount)
   }
 }
 
-int Gamepad_::getDescriptor(USBSetup& setup)
-{
+int Gamepad_::getDescriptor(USBSetup& setup) {
   // Check if this is a HID Class Descriptor request
   if (setup.bmRequestType != REQUEST_DEVICETOHOST_STANDARD_INTERFACE) { return 0; }
   if (setup.wValueH != HID_REPORT_DESCRIPTOR_TYPE) { return 0; }
@@ -278,7 +276,7 @@ int Gamepad_::getDescriptor(USBSetup& setup)
   // due to the USB specs, but Windows and Linux just assumes its in report mode.
   protocol = HID_REPORT_PROTOCOL;
 
-  switch(SISTEMAgp) {
+  switch (SISTEMAgp) {
     case NES_:
       return USB_SendControl(TRANSFER_PGM, _hidReportDescriptorNES, sizeof(_hidReportDescriptorNES));
 
@@ -296,8 +294,7 @@ int Gamepad_::getDescriptor(USBSetup& setup)
   }
 }
 
-bool Gamepad_::setup(USBSetup& setup)
-{
+bool Gamepad_::setup(USBSetup& setup) {
   if (pluggedInterface != setup.wIndex) {
     return false;
   }
@@ -305,8 +302,7 @@ bool Gamepad_::setup(USBSetup& setup)
   uint8_t request = setup.bRequest;
   uint8_t requestType = setup.bmRequestType;
 
-  if (requestType == REQUEST_DEVICETOHOST_CLASS_INTERFACE)
-  {
+  if (requestType == REQUEST_DEVICETOHOST_CLASS_INTERFACE) {
     if (request == HID_GET_REPORT) {
       // TODO: HID_GetReport();
       return true;
@@ -317,8 +313,7 @@ bool Gamepad_::setup(USBSetup& setup)
     }
   }
 
-  if (requestType == REQUEST_HOSTTODEVICE_CLASS_INTERFACE)
-  {
+  if (requestType == REQUEST_HOSTTODEVICE_CLASS_INTERFACE) {
     if (request == HID_SET_PROTOCOL) {
       protocol = setup.wValueL;
       return true;
@@ -327,16 +322,14 @@ bool Gamepad_::setup(USBSetup& setup)
       idle = setup.wValueL;
       return true;
     }
-    if (request == HID_SET_REPORT)
-    {
+    if (request == HID_SET_REPORT) {
     }
   }
 
   return false;
 }
 
-void Gamepad_::reset()
-{
+void Gamepad_::reset() {
   switch (SISTEMAgp) {
     case NES_:
       _GamepadReport_NES.X = 0;
@@ -371,8 +364,7 @@ void Gamepad_::reset()
   this->send();
 }
 
-void Gamepad_::send() 
-{
+void Gamepad_::send() {
   switch (SISTEMAgp) {
     case NES_:
       USB_Send(pluggedEndpoint | TRANSFER_RELEASE, &_GamepadReport_NES, sizeof(GamepadReport_NES));
@@ -396,10 +388,8 @@ void Gamepad_::send()
   }
 }
 
-uint8_t Gamepad_::getShortName(char *name)
-{
-  if(!next) 
-  {
+uint8_t Gamepad_::getShortName(char* name) {
+  if (!next) {
     strcpy(name, gp_serial);
     return strlen(name);
   }
