@@ -152,7 +152,12 @@ void SegaControllers32U4::readPort1() {
   } else {
     if (_ignoreCycles[0]-- == 2)  // Decrease the ignore cycles counter and read 8bitdo home in first "ignored" cycle, this cycle is unused on normal 6-button controllers
     {
-      (bitRead(_inputReg1, DB9_PIN1_BIT1) == LOW) ? currentState[0] |= SC_BTN_HOME : currentState[0] &= ~SC_BTN_HOME;
+      // Real Sega 6-button drives D0-D3 LOW in cycle 6; only 8bitdo leaves D1-D3 idle HIGH and exposes Home on D0.
+      if (bitRead(_inputReg1, DB9_PIN2_BIT1) && bitRead(_inputReg1, DB9_PIN3_BIT1) && bitRead(_inputReg1, DB9_PIN4_BIT1)) {
+        (bitRead(_inputReg1, DB9_PIN1_BIT1) == LOW) ? currentState[0] |= SC_BTN_HOME : currentState[0] &= ~SC_BTN_HOME;
+      } else {
+        currentState[0] &= ~SC_BTN_HOME;
+      }
     }
   }
 }
@@ -212,7 +217,12 @@ void SegaControllers32U4::readPort2() {
   } else {
     if (_ignoreCycles[1]-- == 2)  // Decrease the ignore cycles counter and read 8bitdo home in first "ignored" cycle, this cycle is unused on normal 6-button controllers
     {
-      (bitRead(_inputReg2, DB9_PIN1_BIT1) == LOW) ? currentState[1] |= SC_BTN_HOME : currentState[1] &= ~SC_BTN_HOME;
+      // Real Sega 6-button drives D0-D3 LOW in cycle 6; only 8bitdo leaves D1-D3 idle HIGH and exposes Home on D0.
+      if (bitRead(_inputReg2, DB9_PIN2_BIT1) && bitRead(_inputReg2, DB9_PIN3_BIT1) && bitRead(_inputReg2, DB9_PIN4_BIT1)) {
+        (bitRead(_inputReg2, DB9_PIN1_BIT1) == LOW) ? currentState[1] |= SC_BTN_HOME : currentState[1] &= ~SC_BTN_HOME;
+      } else {
+        currentState[1] &= ~SC_BTN_HOME;
+      }
     }
   }
 }
