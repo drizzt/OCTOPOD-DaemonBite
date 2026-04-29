@@ -1,2 +1,5 @@
 /DaemonBite-Retro-Controllers-USB-master
 /DECAPOD-one_MD_controller
+
+# Editor / formatter backups
+*.orig

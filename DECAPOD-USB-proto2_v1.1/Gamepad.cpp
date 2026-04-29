@@ -200,6 +200,31 @@ Gamepad_::Gamepad_(int SYSTEM)
   : PluggableUSBModule(1, 1, epType), protocol(HID_REPORT_PROTOCOL), idle(1) {
   SISTEMAgp = SYSTEM;
   epType[0] = EP_TYPE_INTERRUPT_IN;
+
+  // Cache report buffer ptr + size so send()/reset() are switch-free.
+  switch (SYSTEM) {
+    case NES_:
+      _reportPtr  = &_GamepadReport_NES;
+      _reportSize = sizeof(GamepadReport_NES);
+      break;
+    case SNES_:
+      _reportPtr  = &_GamepadReport_SNES;
+      _reportSize = sizeof(GamepadReport_SNES);
+      break;
+    case NEOGEO_:
+      _reportPtr  = &_GamepadReport_NEOGEO;
+      _reportSize = sizeof(GamepadReport_NEOGEO);
+      break;
+    case GENESIS_:
+      _reportPtr  = &_GamepadReport_GENESIS;
+      _reportSize = sizeof(GamepadReport_GENESIS);
+      break;
+    default:
+      _reportPtr  = &_GamepadReport;
+      _reportSize = sizeof(GamepadReport);
+      break;
+  }
+
   PluggableUSB().plug(this);
 }
 
