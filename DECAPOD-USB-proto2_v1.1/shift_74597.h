@@ -43,8 +43,8 @@
 
 class shift_74597 {
 public:
-  shift_74597(int QH) : _QH(QH) {}
-  ~shift_74597() {}
+  shift_74597() = default;
+  ~shift_74597() = default;
 
   // Configure SCK / SLOAD as outputs and the QH data line as a pulled-up
   // input. Call once before any load()/getByte() calls.
@@ -53,11 +53,8 @@ public:
   // Pulse RCK / SLOAD to capture the parallel inputs into the register.
   void load();
 
-  // Clock 8 bits MSB-first off QH and return them.
+  // Clock 8 bits MSB-first off QH and return them. QH is hardwired to PD1.
   char getByte();
-
-private:
-  int _QH;
 };
 
 #endif /*74597_INCLUDE*/

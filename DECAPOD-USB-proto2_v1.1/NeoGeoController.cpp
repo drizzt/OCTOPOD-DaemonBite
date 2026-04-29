@@ -7,10 +7,9 @@
 
 namespace {
 
-// QH (serial out) of the 74HC597 chain is wired to PD1 (Arduino pin 2).
-constexpr int QH = 2;
-
-shift_74597 shifter(QH);
+// QH (serial out) of the 74HC597 chain is hardwired to PD1; the driver
+// reads PIND directly, so no pin number needs to be passed in.
+shift_74597 shifter;
 
 uint8_t  axes[2]        = { 0x0f, 0x0f };
 uint8_t  axesPrev[2]    = { 0x0f, 0x0f };

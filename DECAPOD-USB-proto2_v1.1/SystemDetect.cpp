@@ -8,8 +8,9 @@ namespace SystemDetect {
 
 int detect() {
   // PD5 is the shared "did this carrier respond?" sense line. Pull it up
-  // through the internal resistor and let each candidate analogWrite drive
-  // its own detect pin to 255 in turn.
+  // through the internal resistor and let each candidate digitalWrite drive
+  // its own detect pin HIGH in turn (a steady high is enough; analogWrite
+  // would needlessly configure a PWM Timer).
   DDRD  &= ~B00100000;  // PD5 input
   PORTD |=  B00100000;  // internal pull-up
 
@@ -20,26 +21,26 @@ int detect() {
 
   int system = NOT_SELECTED;
 
-  analogWrite(pinSNES, 255);
+  digitalWrite(pinSNES, HIGH);
   if (((PIND & B00100000) >> 5) == 1) {
     system = SNES_;
   } else {
-    analogWrite(pinSNES, 0);
-    analogWrite(pinNES, 255);
+    digitalWrite(pinSNES, LOW);
+    digitalWrite(pinNES, HIGH);
     if (((PIND & B00100000) >> 5) == 1) {
       system = NES_;
     } else {
-      analogWrite(pinNES, 0);
-      analogWrite(pinNEOGEO, 255);
+      digitalWrite(pinNES, LOW);
+      digitalWrite(pinNEOGEO, HIGH);
       if (((PIND & B00100000) >> 5) == 1) {
         system = NEOGEO_;
       } else {
-        analogWrite(pinNEOGEO, 0);
-        analogWrite(pinGENESIS, 255);
+        digitalWrite(pinNEOGEO, LOW);
+        digitalWrite(pinGENESIS, HIGH);
         if (((PIND & B00100000) >> 5) == 1) {
           system = GENESIS_;
         } else {
-          analogWrite(pinGENESIS, 0);
+          digitalWrite(pinGENESIS, LOW);
           system = NOT_SELECTED;
         }
       }
