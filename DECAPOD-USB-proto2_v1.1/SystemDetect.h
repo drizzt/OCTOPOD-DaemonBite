@@ -28,4 +28,12 @@ int detect();
 // name (e.g. "OCTOPOD NES").
 void applySerial(int system, char* gp_serial);
 
+// Periodic carrier-change probe. Throttled to ~100 ms via an internal
+// millis() gate, saves/restores PORTD/DDRD/PORTF/DDRF around detect() so
+// the active runner's pin map is preserved. If the probe reports a system
+// different from currentSystem (including NOT_SELECTED on carrier removal),
+// triggers a watchdog reset so setup() re-binds the right HID descriptor.
+// Never returns in the reboot case.
+void checkAndReboot(int currentSystem);
+
 }  // namespace SystemDetect

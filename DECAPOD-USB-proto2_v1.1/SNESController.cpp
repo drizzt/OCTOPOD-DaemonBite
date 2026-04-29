@@ -3,6 +3,7 @@
 #include "SNESController.h"
 
 #include "Config.h"
+#include "SystemDetect.h"
 
 namespace {
 
@@ -110,7 +111,7 @@ void detectControllerTypes() {
 
 }  // namespace
 
-void SNESController::run(Gamepad_* Gamepad[]) {
+void SNESController::run(Gamepad_* Gamepad[], int system) {
   // Latch + clock outputs (PD7, PD5, PD4); data inputs with pull-ups.
   DDRD  |=  B10110000;
   PORTD &= ~B10110000;
@@ -130,6 +131,8 @@ void SNESController::run(Gamepad_* Gamepad[]) {
   // > 20us), so the previous micros() gate was a guaranteed-true check;
   // dropping it saves two micros() calls per poll without changing behaviour.
   while (1) {
+    SystemDetect::checkAndReboot(system);
+
     sendLatch();
 
     for (uint8_t btn = 0; btn < buttonCount; btn++) {

@@ -18,7 +18,9 @@
 
 namespace GenesisController {
 
-// Initialises both DB9 ports and enters an infinite poll loop. Never returns.
-void run(Gamepad_* Gamepad[]);
+// Initialises both DB9 ports and enters an infinite poll loop. Returns
+// only via watchdog reset on carrier swap. `system` is the currently-bound
+// system enum value, used by the periodic detect probe.
+void run(Gamepad_* Gamepad[], int system);
 
 }  // namespace GenesisController

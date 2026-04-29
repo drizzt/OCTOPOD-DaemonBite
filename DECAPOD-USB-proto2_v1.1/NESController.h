@@ -18,7 +18,9 @@
 namespace NESController {
 
 // Sets up data/clock/latch lines, then enters an infinite read loop that
-// emits a USB HID report on every change. Never returns.
-void run(Gamepad_* Gamepad[]);
+// emits a USB HID report on every change. Returns only via watchdog reset
+// when SystemDetect::checkAndReboot detects a carrier swap. `system` is
+// the currently-bound system enum value, used by the periodic detect probe.
+void run(Gamepad_* Gamepad[], int system);
 
 }  // namespace NESController

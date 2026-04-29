@@ -3,6 +3,7 @@
 #include "NeoGeoController.h"
 
 #include "Config.h"
+#include "SystemDetect.h"
 #include "shift_74597.h"
 
 namespace {
@@ -29,7 +30,7 @@ const uint8_t kNibbleRev[16] = {
 
 }  // namespace
 
-void NeoGeoController::run(Gamepad_* Gamepad[]) {
+void NeoGeoController::run(Gamepad_* Gamepad[], int system) {
   shifter.init();
 
   buttons[0] = 0;
@@ -41,6 +42,8 @@ void NeoGeoController::run(Gamepad_* Gamepad[]) {
   }
 
   while (1) {
+    SystemDetect::checkAndReboot(system);
+
     shifter.load();
     char in0 = shifter.getByte();
     char in1 = shifter.getByte();

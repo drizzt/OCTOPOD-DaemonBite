@@ -2,6 +2,8 @@
 
 #include "SystemDetect.h"
 
+#include <avr/wdt.h>
+
 #include "Config.h"
 
 namespace SystemDetect {
@@ -54,6 +56,41 @@ int detect() {
   pinMode(pinGENESIS, INPUT);
 
   return system;
+}
+
+void checkAndReboot(int currentSystem) {
+  // Cadence: ~100 ms. Cheap millis() gate keeps the per-frame cost at one
+  // 32-bit subtract+compare; the actual probe runs ~10x/second.
+  static uint32_t lastCheck = 0;
+  uint32_t now = millis();
+  if ((uint32_t)(now - lastCheck) < 100) return;
+  lastCheck = now;
+
+  // Snapshot the runner's pin map. detect() drives PD5 + A0..A3 (PORTF),
+  // and leaves all four detect pins as INPUT no-pullup on exit, which
+  // would corrupt the runner's latch/clock/data setup if not restored.
+  uint8_t savePORTD = PORTD;
+  uint8_t saveDDRD  = DDRD;
+  uint8_t savePORTF = PORTF;
+  uint8_t saveDDRF  = DDRF;
+
+  int detected = detect();
+
+  // Restore PORT before DDR: a brief INPUT_PULLUP is harmless, but a brief
+  // OUTPUT_HIGH on PD5 would look like a spurious latch pulse to the
+  // attached carrier.
+  PORTD = savePORTD;
+  DDRD  = saveDDRD;
+  PORTF = savePORTF;
+  DDRF  = saveDDRF;
+
+  if (detected != currentSystem) {
+    // Different carrier (or carrier removed). Reboot via watchdog so
+    // setup() re-runs detect() and Gamepad_ binds the right HID descriptor
+    // for the new device on USB re-enumeration.
+    wdt_enable(WDTO_15MS);
+    while (1) {}
+  }
 }
 
 void applySerial(int system, char* gp_serial) {

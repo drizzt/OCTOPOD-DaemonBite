@@ -27,6 +27,8 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <avr/wdt.h>
+
 #include "Config.h"
 #include "Gamepad.h"
 #include "SystemDetect.h"
@@ -43,6 +45,12 @@ char gp_serial[16] = "OCTOPOD ";
 static int SISTEMA = NOT_SELECTED;
 
 void setup() {
+  // Caterina/Pro Micro leaves WDIF set on a watchdog-induced reset; without
+  // clearing MCUSR + disabling WDT here, hot-swap reboots boot-loop because
+  // wdt_reset() never gets called early enough.
+  MCUSR = 0;
+  wdt_disable();
+
   // Wait until USB has actually enumerated. While waiting, force PD/PF as
   // hi-Z so a not-yet-powered carrier board cannot back-feed the MCU.
   while (!(UDADDR & _BV(ADDEN))) {
@@ -66,18 +74,20 @@ void loop() {
   Gamepad_* Gamepad[GAMEPAD_COUNT] = { &Gamepad0, &Gamepad1 };
 
   switch (SISTEMA) {
-    case NES_:     NESController::run(Gamepad);     break;
-    case SNES_:    SNESController::run(Gamepad);    break;
-    case NEOGEO_:  NeoGeoController::run(Gamepad);  break;
-    case GENESIS_: GenesisController::run(Gamepad); break;
+    case NES_:     NESController::run(Gamepad, SISTEMA);     break;
+    case SNES_:    SNESController::run(Gamepad, SISTEMA);    break;
+    case NEOGEO_:  NeoGeoController::run(Gamepad, SISTEMA);  break;
+    case GENESIS_: GenesisController::run(Gamepad, SISTEMA); break;
     case NOT_SELECTED:
     default:
       // No carrier detected: idle the report so the host still sees a
-      // valid (empty) gamepad.
+      // valid (empty) gamepad. Probe periodically so attaching a carrier
+      // triggers a reset → re-enumeration with the right HID descriptor.
       for (byte gp = 0; gp < GAMEPAD_COUNT; gp++) {
         Gamepad[gp]->reset();
         Gamepad[gp]->send();
       }
+      SystemDetect::checkAndReboot(SISTEMA);
       break;
   }
 }

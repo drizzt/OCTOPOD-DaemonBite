@@ -3,6 +3,7 @@
 #include "NESController.h"
 
 #include "Config.h"
+#include "SystemDetect.h"
 
 namespace {
 
@@ -35,7 +36,7 @@ inline void sendClock() {
 
 }  // namespace
 
-void NESController::run(Gamepad_* Gamepad[]) {
+void NESController::run(Gamepad_* Gamepad[], int system) {
   // Latch + clock lines as outputs (PD7, PD5, PD4); data pins (PD1, PD2)
   // as inputs with pull-ups so an absent controller floats high (=released).
   DDRD  |=  B10110000;
@@ -54,6 +55,8 @@ void NESController::run(Gamepad_* Gamepad[]) {
   // so the previous micros() gate was a guaranteed-true check; dropping it
   // saves two micros() calls per poll without changing behaviour.
   while (1) {
+    SystemDetect::checkAndReboot(system);
+
     sendLatch();
     for (uint8_t btn = 0; btn < BUTTON_COUNT; btn++) {
       for (byte gp = 0; gp < GAMEPAD_COUNT; gp++) {

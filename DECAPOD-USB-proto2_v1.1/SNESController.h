@@ -20,7 +20,8 @@ namespace SNESController {
 
 // Sets up data/clock/latch lines, probes the controllers a few frames to
 // distinguish NES / SNES / NTT, then enters an infinite read loop.
-// Never returns.
-void run(Gamepad_* Gamepad[]);
+// Returns only via watchdog reset on carrier swap. `system` is the
+// currently-bound system enum value, used by the periodic detect probe.
+void run(Gamepad_* Gamepad[], int system);
 
 }  // namespace SNESController

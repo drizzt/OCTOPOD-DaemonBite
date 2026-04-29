@@ -4,6 +4,7 @@
 
 #include "Config.h"
 #include "SegaControllers32U4.h"
+#include "SystemDetect.h"
 
 namespace {
 
@@ -13,7 +14,7 @@ word lastState[2] = { 1, 1 };
 
 }  // namespace
 
-void GenesisController::run(Gamepad_* Gamepad[]) {
+void GenesisController::run(Gamepad_* Gamepad[], int system) {
   controllers.setup_controllers();
 
   for (byte gp = 0; gp < GAMEPAD_COUNT; gp++) {
@@ -22,6 +23,8 @@ void GenesisController::run(Gamepad_* Gamepad[]) {
   }
 
   while (1) {
+    SystemDetect::checkAndReboot(system);
+
     for (byte gp = 0; gp < GAMEPAD_COUNT; gp++) {
       controllers.readState();
 
